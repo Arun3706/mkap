@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - HR Assessment System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/admin.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="admin-panel.html">
+                <i class="fas fa-shield-alt me-2"></i>
+                Admin Panel
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="navbar-nav ms-auto">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-shield me-2"></i>
+                            Administrator
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block bg-dark sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#dashboard" data-tab="dashboard">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#builder" data-tab="builder">
+                                <i class="fas fa-hammer me-2"></i>
+                                Task For Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#assign" data-tab="assign">
+                                <i class="fas fa-tasks me-2"></i>
+                                Assign Assessments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#users" data-tab="users">
+                                <i class="fas fa-users me-2"></i>
+                                Users
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#assessments" data-tab="assessments">
+                                <i class="fas fa-clipboard-list me-2"></i>
+                                Assessments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#analytics" data-tab="analytics">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Analytics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#departments" data-tab="departments">
+                                <i class="fas fa-building me-2"></i>
+                                Departments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#reports" data-tab="reports">
+                                <i class="fas fa-file-alt me-2"></i>
+                                Reports
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Dashboard Tab -->
+                <div id="dashboard-tab" class="tab-content">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Admin Dashboard</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button type="button" class="btn btn-sm btn-primary" onclick="refreshData()">
+                                <i class="fas fa-sync-alt me-1"></i>Refresh
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger ms-2" onclick="resetDemoData()">
+                                <i class="fas fa-undo me-1"></i>Reset Demo Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card text-center p-3">
+                                <i class="fas fa-users fa-3x text-primary"></i>
+                                <h4 id="totalUsers">0</h4>
+                                <p>Total Users</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center p-3">
+                                <i class="fas fa-file-alt fa-3x text-success"></i>
+                                <h4 id="assessmentsCompleted">0</h4>
+                                <p>Assessments Completed</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card text-center p-3">
+                                <i class="fas fa-tasks fa-3x text-info"></i>
+                                <h4><a href="#" class="text-decoration-none" onclick="switchTab('assign')">Assign Assessments</a></h4>
+                                <p>Assign assessments to users or departments</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Assessment Performance Overview</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="performanceChart" height="100"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Department Distribution</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="departmentChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Recent Activity</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="recentActivity">
+                                <!-- Recent activity will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assign Assessments Tab -->
+                <div id="assign-tab" class="tab-content d-none">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Assign Assessments</h1>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Select users and assessments to assign</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="assignAssessmentForm">
+                                <div class="mb-3">
+                                    <label for="assessmentTemplate" class="form-label">Assessment Template</label>
+                                    <select class="form-select" id="assessmentTemplate" required>
+                                        <option value="" disabled selected>Select an assessment</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Assign To</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="assignmentType" id="assignToDepartment" value="department" checked>
+                                        <label class="form-check-label" for="assignToDepartment">Department</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="assignmentType" id="assignToUser" value="user">
+                                        <label class="form-check-label" for="assignToUser">Specific Users</label>
+                                    </div>
+                                </div>
+                                <div id="departmentSelection" class="mb-3">
+                                    <label for="department" class="form-label">Department</label>
+                                    <select class="form-select" id="department">
+                                        <option value="all">All Departments</option>
+                                    </select>
+                                </div>
+                                <div id="userSelection" class="mb-3 d-none">
+                                    <label for="users" class="form-label">Users</label>
+                                    <select class="form-select" id="users" multiple></select>
+                                    <div class="form-text">Hold Ctrl/Cmd to select multiple users.</div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Assign Assessment</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Tab -->
+                <div id="users-tab" class="tab-content d-none">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">User Management</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="input-group me-2">
+                                <input type="text" class="form-control" id="userSearch" placeholder="Search users...">
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="exportUsers()">
+                                <i class="fas fa-download me-1"></i>Export
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped" id="usersTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Department</th>
+                                            <th>Experience</th>
+                                            <th>Assessments</th>
+                                            <th>Last Active</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- User data will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assessments Tab -->
+                <div id="assessments-tab" class="tab-content d-none">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Assessment Results</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-group me-2" id="assessmentCategoryButtons">
+                                <button class="btn btn-outline-primary category-btn active" data-category="">All</button>
+                                <button class="btn btn-outline-primary category-btn" data-category="technical">Technical</button>
+                                <button class="btn btn-outline-primary category-btn" data-category="behavioral">Behavioral</button>
+                                <button class="btn btn-outline-primary category-btn" data-category="personality">Personality</button>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="exportAssessments()">
+                                <i class="fas fa-download me-1"></i>Export
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped" id="assessmentsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Assessment</th>
+                                            <th>Score</th>
+                                            <th>Duration</th>
+                                            <th>Completed</th>
+                                            <th>Actions</th>
+                                            <th>Compatibility</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Assessment data will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Tab -->
+                <div id="analytics-tab" class="tab-content d-none">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Advanced Analytics</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-group me-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary active" data-period="week">Week</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-period="month">Month</button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-period="year">Year</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Charts -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Score Distribution</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="scoreDistributionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Skill Comparison</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="skillComparisonChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">User Performance Comparison</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="userComparisonChart" height="100"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Builder Tab -->
+                <div id="builder-tab" class="tab-content d-none">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Assessment Builder (MCQ)</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Create New MCQ Assessment</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="mcqBuilderForm">
+                                        <div class="mb-3">
+                                            <label class="form-label">Category Key</label>
+                                            <input type="text" class="form-control" id="builderCategoryKey" placeholder="e.g., technical_basics" required>
+                                            <div class="form-text">Lowercase, no spaces. Used as unique identifier.</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Title</label>
+                                            <input type="text" class="form-control" id="builderTitle" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea class="form-control" id="builderDescription" rows="2" required></textarea>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Time Limit (minutes)</label>
+                                                    <input type="number" class="form-control" id="builderTimeLimit" value="20" min="1" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Difficulty</label>
+                                                    <select class="form-select" id="builderDifficulty">
+                                                        <option value="Easy" selected>Easy</option>
+                                                        <option value="Medium">Medium</option>
+                                                        <option value="Hard">Hard</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <h6 class="mb-0">Questions</h6>
+                                            <button type="button" class="btn btn-sm btn-outline-primary" id="addMcqQuestionBtn"><i class="fas fa-plus me-1"></i>Add Question</button>
+                                        </div>
+                                        <div id="mcqQuestionsContainer"></div>
+                                        <div class="mt-3 text-end">
+                                            <button type="submit" class="btn btn-primary">Save Assessment</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Custom Assessments</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="customAssessmentsList" class="list-group">
+                                        <!-- Custom templates will render here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Departments Tab -->
+                <div id="departments-tab" class="tab-content d-none">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Departments</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="card">
+                                <div class="card-header"><h5 class="mb-0">Add Department</h5></div>
+                                <div class="card-body">
+                                    <form id="addDepartmentForm">
+                                        <div class="mb-3">
+                                            <label class="form-label">Department Name</label>
+                                            <input type="text" class="form-control" id="newDepartmentName" placeholder="e.g., Data Science" required>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Add</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card">
+                                <div class="card-header"><h5 class="mb-0">All Departments</h5></div>
+                                <div class="card-body">
+                                    <ul id="departmentsList" class="list-group">
+                                        <!-- Departments will render here -->
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Tab -->
+                <div id="reports-tab" class="tab-content d-none">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Reports & Export</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Generate Reports</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Report Type</label>
+                                        <select class="form-select" id="reportType">
+                                            <option value="user-summary">User Summary</option>
+                                            <option value="assessment-results">Assessment Results</option>
+                                            <option value="performance-analysis">Performance Analysis</option>
+                                            <option value="department-comparison">Department Comparison</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Export Format</label>
+                                        <select class="form-select" id="exportFormat">
+                                            <option value="json">JSON</option>
+                                            <option value="csv">CSV</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="generateReport()">
+                                        <i class="fas fa-file-export me-2"></i>Generate Report
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">Quick Actions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-grid gap-2">
+                                        <button class="btn btn-outline-primary" onclick="exportAllData()">
+                                            <i class="fas fa-database me-2"></i>Export All Data
+                                        </button>
+                                        <button class="btn btn-outline-success" onclick="exportUserProfiles()">
+                                            <i class="fas fa-users me-2"></i>Export User Profiles
+                                        </button>
+                                        <button class="btn btn-outline-info" onclick="exportAssessmentData()">
+                                            <i class="fas fa-clipboard-list me-2"></i>Export Assessment Data
+                                        </button>
+                                        <button class="btn btn-outline-warning" onclick="clearOldData()">
+                                            <i class="fas fa-trash me-2"></i>Clear Old Data
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Category Tabs and Reports Table -->
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs" id="categoryTabs">
+                                <li class="nav-item">
+                                    <a class="nav-link" data-category="technical" href="#">Technical</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-category="behavioral" href="#">Behavioral</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-category="personality" href="#">Personality</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-category="data" href="#">Data</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div id="categoryReportsContainer">
+                                <!-- Chart for user scores by category -->
+                                <div class="mb-4">
+                                    <canvas id="categoryScoreChart" height="80"></canvas>
+                                </div>
+                                <!-- Reports table will be rendered here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- User Detail Modal -->
+    <div class="modal fade" id="userDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="userDetailContent">
+                        <!-- User details will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Compatibility Modal -->
+    <div class="modal fade" id="compatibilityModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Compatibility</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="compatibilityContent">
+                        <!-- Compatibility results will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="data/demo-data.js"></script>
+    <script src="data/assessment-templates.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/admin-assign-assessment.js"></script>
+    <script>
+function resetDemoData() {
+    if (confirm('Are you sure you want to reset all demo data? This will clear all users and assessments and reload the default demo data.')) {
+        localStorage.clear();
+        location.reload();
+    }
+}
+</script>
+</body>
+</html>

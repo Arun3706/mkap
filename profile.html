@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - HR Assessment System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-clipboard-check me-2"></i>
+                HR Assessment System
+            </a>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-2"></i>
+                        <span id="userName">User</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="dashboard.html">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block bg-dark">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="dashboard.html">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="assessment.html">
+                                <i class="fas fa-clipboard-list me-2"></i>
+                                Take Assessment
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="profile.html">
+                                <i class="fas fa-user me-2"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="reports.html">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                My Reports
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">My Profile</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button type="button" class="btn btn-sm btn-primary" id="editProfileBtn">
+                            <i class="fas fa-edit me-1"></i>Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Profile Information -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <div class="profile-avatar mb-3">
+                                    <i class="fas fa-user-circle fa-5x text-primary"></i>
+                                </div>
+                                <h4 id="profileName">Loading...</h4>
+                                <p class="text-muted" id="profileEmail">Loading...</p>
+                                <div class="profile-badges mt-3">
+                                    <span class="badge bg-primary" id="profileDepartment">Department</span>
+                                    <span class="badge bg-info" id="profileExperience">Experience</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-trophy me-2"></i>Achievements
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="achievements">
+                                    <!-- Achievements will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Details and Statistics -->
+                    <div class="col-md-8">
+                        <!-- Statistics Cards -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card stats-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="stats-icon bg-success">
+                                                <i class="fas fa-clipboard-check"></i>
+                                            </div>
+                                            <div class="ms-3">
+                                                <h4 class="card-title mb-0" id="completedCount">0</h4>
+                                                <p class="card-text text-muted">Assessments Completed</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card stats-card">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="stats-icon bg-info">
+                                                <i class="fas fa-percentage"></i>
+                                            </div>
+                                            <div class="ms-3">
+                                                <h4 class="card-title mb-0" id="averageScore">0%</h4>
+                                                <p class="card-text text-muted">Average Score</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personal Information -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-info-circle me-2"></i>Personal Information
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="profileForm">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="fullName" readonly>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Email Address</label>
+                                            <input type="email" class="form-control" id="email" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Department</label>
+                                            <select class="form-select" id="department" disabled>
+                                                <option value="IT">Information Technology</option>
+                                                <option value="HR">Human Resources</option>
+                                                <option value="Finance">Finance</option>
+                                                <option value="Marketing">Marketing</option>
+                                                <option value="Operations">Operations</option>
+                                                <option value="Sales">Sales</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Experience Level</label>
+                                            <select class="form-select" id="experience" disabled>
+                                                <option value="0-1">0-1 years</option>
+                                                <option value="2-5">2-5 years</option>
+                                                <option value="6-10">6-10 years</option>
+                                                <option value="11-15">11-15 years</option>
+                                                <option value="15+">15+ years</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Member Since</label>
+                                            <input type="text" class="form-control" id="memberSince" readonly>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Last Login</label>
+                                            <input type="text" class="form-control" id="lastLogin" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="profile-actions d-none" id="profileActions">
+                                        <button type="button" class="btn btn-primary" id="saveProfileBtn">
+                                            <i class="fas fa-save me-2"></i>Save Changes
+                                        </button>
+                                        <button type="button" class="btn btn-secondary ms-2" id="cancelEditBtn">
+                                            <i class="fas fa-times me-2"></i>Cancel
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Skill Progress -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-chart-line me-2"></i>Skill Progress
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="skillProgress">
+                                    <!-- Skill progress bars will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assessment History -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-history me-2"></i>Assessment History
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped" id="assessmentHistory">
+                                        <thead>
+                                            <tr>
+                                                <th>Assessment</th>
+                                                <th>Category</th>
+                                                <th>Score</th>
+                                                <th>Duration</th>
+                                                <th>Completed</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Assessment history will be loaded here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="noAssessments" class="text-center text-muted py-4 d-none">
+                                    <i class="fas fa-clipboard fa-3x mb-3"></i>
+                                    <p>No assessments completed yet.</p>
+                                    <a href="assessment.html" class="btn btn-primary">
+                                        <i class="fas fa-play me-2"></i>Take Your First Assessment
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Profile management functionality
+        $(document).ready(function() {
+            loadProfile();
+            
+            $('#editProfileBtn').click(function() {
+                toggleEditMode(true);
+            });
+            
+            $('#cancelEditBtn').click(function() {
+                toggleEditMode(false);
+                loadProfile(); // Reload original data
+            });
+            
+            $('#saveProfileBtn').click(function() {
+                saveProfile();
+            });
+        });
+        
+        function loadProfile() {
+            const currentUser = getCurrentUser();
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Update profile display
+            $('#userName, #profileName, #fullName').text(currentUser.fullName);
+            $('#profileEmail, #email').val(currentUser.email);
+            $('#profileDepartment, #department').val(currentUser.department);
+            $('#profileExperience, #experience').val(currentUser.experience);
+            $('#memberSince').val(formatDate(currentUser.registeredAt));
+            $('#lastLogin').val(formatDate(currentUser.lastLogin || currentUser.registeredAt));
+            
+            // Load assessment statistics
+            const assessments = getStorageItem('assessmentResults') || [];
+            const userAssessments = assessments.filter(a => a.userId === currentUser.id);
+            
+            $('#completedCount').text(userAssessments.length);
+            
+            if (userAssessments.length > 0) {
+                const avgScore = userAssessments.reduce((sum, a) => sum + a.score, 0) / userAssessments.length;
+                $('#averageScore').text(Math.round(avgScore) + '%');
+            }
+            
+            // Load skill progress
+            loadSkillProgress(userAssessments);
+            
+            // Load assessment history
+            loadAssessmentHistory(userAssessments);
+            
+            // Load achievements
+            loadAchievements(userAssessments);
+        }
+        
+        function toggleEditMode(edit) {
+            const readonlyFields = ['#fullName', '#department', '#experience'];
+            const actions = $('#profileActions');
+            const editBtn = $('#editProfileBtn');
+            
+            readonlyFields.forEach(field => {
+                if (field.includes('select')) {
+                    $(field).prop('disabled', !edit);
+                } else {
+                    $(field).prop('readonly', !edit);
+                }
+            });
+            
+            if (edit) {
+                actions.removeClass('d-none');
+                editBtn.addClass('d-none');
+            } else {
+                actions.addClass('d-none');
+                editBtn.removeClass('d-none');
+            }
+        }
+        
+        function saveProfile() {
+            const currentUser = getCurrentUser();
+            const updatedUser = {
+                ...currentUser,
+                fullName: $('#fullName').val(),
+                department: $('#department').val(),
+                experience: $('#experience').val()
+            };
+            
+            // Update user in storage
+            const users = getStorageItem('users') || [];
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = updatedUser;
+                setStorageItem('users', users);
+                setStorageItem('currentUser', updatedUser);
+                
+                showAlert('Profile updated successfully!', 'success');
+                toggleEditMode(false);
+                loadProfile();
+            }
+        }
+        
+        function loadSkillProgress(assessments) {
+            const skillContainer = $('#skillProgress');
+            const skills = {};
+            
+            assessments.forEach(assessment => {
+                const category = assessment.category || 'General';
+                if (!skills[category]) {
+                    skills[category] = { total: 0, count: 0 };
+                }
+                skills[category].total += assessment.score;
+                skills[category].count++;
+            });
+            
+            const skillHTML = Object.keys(skills).map(skill => {
+                const average = Math.round(skills[skill].total / skills[skill].count);
+                const progressClass = average >= 80 ? 'success' : average >= 60 ? 'warning' : 'danger';
+                
+                return `
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>${skill}</span>
+                            <span>${average}%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-${progressClass}" style="width: ${average}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            skillContainer.html(skillHTML || '<p class="text-muted">No skill data available</p>');
+        }
+        
+        function loadAssessmentHistory(assessments) {
+            const tbody = $('#assessmentHistory tbody');
+            
+            if (assessments.length === 0) {
+                $('#noAssessments').removeClass('d-none');
+                return;
+            }
+            
+            const historyHTML = assessments.map(assessment => `
+                <tr>
+                    <td>${assessment.assessmentTitle}</td>
+                    <td><span class="badge bg-primary">${assessment.category}</span></td>
+                    <td>
+                        <span class="badge bg-${assessment.score >= 80 ? 'success' : assessment.score >= 60 ? 'warning' : 'danger'}">
+                            ${assessment.score}%
+                        </span>
+                    </td>
+                    <td>${Math.round(assessment.timeSpent / 60)} min</td>
+                    <td>${formatDate(assessment.completedAt)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary" onclick="viewAssessmentDetails('${assessment.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            tbody.html(historyHTML);
+        }
+        
+        function loadAchievements(assessments) {
+            const achievements = [];
+            
+            if (assessments.length >= 1) achievements.push({ icon: 'fa-medal', title: 'First Assessment', desc: 'Completed first assessment' });
+            if (assessments.length >= 5) achievements.push({ icon: 'fa-trophy', title: 'Assessment Pro', desc: 'Completed 5 assessments' });
+            if (assessments.some(a => a.score >= 90)) achievements.push({ icon: 'fa-star', title: 'High Achiever', desc: 'Scored 90%+ on an assessment' });
+            
+            const achievementHTML = achievements.map(achievement => `
+                <div class="achievement-item mb-2">
+                    <div class="d-flex align-items-center">
+                        <div class="achievement-icon me-3">
+                            <i class="fas ${achievement.icon} text-warning"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">${achievement.title}</h6>
+                            <small class="text-muted">${achievement.desc}</small>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            $('#achievements').html(achievementHTML || '<p class="text-muted">No achievements yet</p>');
+        }
+        
+        function viewAssessmentDetails(assessmentId) {
+            // Implementation for viewing assessment details
+            showAlert('Assessment details view coming soon!', 'info');
+        }
+    </script>
+</body>
+</html>

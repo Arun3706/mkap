@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - HR Assessment System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-clipboard-check me-2"></i>
+                HR Assessment System
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="navbar-nav ms-auto">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>
+                            <span id="userName">User</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profile.html">
+                                <i class="fas fa-user me-2"></i>Profile
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block bg-dark sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="dashboard.html">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="assessment.html">
+                                <i class="fas fa-clipboard-list me-2"></i>
+                                Take Assessment
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="profile.html">
+                                <i class="fas fa-user me-2"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="reports.html">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                My Reports
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Dashboard</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-calendar me-1"></i>Today
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Welcome Card -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card welcome-card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-8">
+                                        <h4 class="card-title mb-2">Welcome back, <span id="welcomeUserName">User</span>!</h4>
+                                        <p class="card-text text-muted mb-3">Ready to take your next assessment? Your progress is looking great!</p>
+                                        <a href="assessment.html" class="btn btn-primary">
+                                            <i class="fas fa-play me-2"></i>Start Assessment
+                                        </a>
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <div class="welcome-icon">
+                                            <i class="fas fa-rocket fa-4x text-primary"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assessment Interface -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <ul class="nav nav-tabs card-header-tabs" id="assessmentTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="my-assessments-tab" data-bs-toggle="tab" data-bs-target="#my-assessments" type="button" role="tab">
+                                            <i class="fas fa-clipboard-list me-2"></i>My Assessments
+                                        </button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="take-assessment-tab" data-bs-toggle="tab" data-bs-target="#take-assessment" type="button" role="tab">
+                                            <i class="fas fa-play-circle me-2"></i>Take Assessment
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="assessmentTabContent">
+                                    <!-- My Assessments Tab -->
+                                    <div class="tab-pane fade show active" id="my-assessments" role="tabpanel">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" id="assessmentTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Assessment</th>
+                                                        <th>Status</th>
+                                                        <th>Score</th>
+                                                        <th>Date Taken</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="assessmentTableBody">
+                                                    <!-- Assessment data will be loaded here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Take Assessment Tab -->
+                                    <div class="tab-pane fade" id="take-assessment" role="tabpanel">
+                                        <!-- Assigned Assessments -->
+                                        <div id="assignedAssessments">
+                                            <h4 class="mb-4">Available Assessments</h4>
+                                            <div id="assignedAssessmentsList" class="row">
+                                                <!-- Assessments will be loaded here -->
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Assessment Instructions -->
+                                        <div id="assessmentInstructions" class="d-none">
+                                            <div class="card mb-4">
+                                                <div class="card-header">
+                                                    <h5 id="assessmentTitle">Assessment Instructions</h5>
+                                                </div>
+                                                <div class="card-body" id="instructionsContent">
+                                                    <!-- Instructions will be loaded here -->
+                                                </div>
+                                                <div class="card-footer text-end">
+                                                    <button class="btn btn-secondary me-2" onclick="goBackToSelection()">
+                                                        <i class="fas fa-arrow-left me-1"></i>Back
+                                                    </button>
+                                                    <button class="btn btn-primary" onclick="startAssessment()">
+                                                        <i class="fas fa-play me-1"></i>Start Assessment
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Assessment Questions -->
+                                        <div id="assessmentQuestions" class="d-none">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="card mb-4">
+                                                        <div class="card-header">
+                                                            <h6 class="mb-0">Questions</h6>
+                                                        </div>
+                                                        <div class="card-body p-0">
+                                                            <div id="questionNav" class="list-group list-group-flush">
+                                                                <!-- Question navigation will be loaded here -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <div class="card">
+                                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                                            <h6 class="mb-0">Question <span id="questionNumber">1</span></h6>
+                                                            <div class="text-muted">
+                                                                <i class="fas fa-clock me-1"></i>
+                                                                Time remaining: <span id="timeRemaining">--:--</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div id="questionContainer">
+                                                                <!-- Questions will be loaded here -->
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-footer d-flex justify-content-between">
+                                                            <button class="btn btn-outline-secondary" onclick="previousQuestion()" id="prevBtn" disabled>
+                                                                <i class="fas fa-arrow-left me-1"></i>Previous
+                                                            </button>
+                                                            <div>
+                                                                <button class="btn btn-outline-primary me-2" onclick="saveAndNext()" id="saveBtn">
+                                                                    <i class="fas fa-save me-1"></i>Save
+                                                                </button>
+                                                                <button class="btn btn-primary" onclick="nextQuestion()" id="nextBtn">
+                                                                    Next<i class="fas fa-arrow-right ms-1"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Assessment Complete -->
+                                        <div id="assessmentComplete" class="d-none text-center py-5">
+                                            <div class="card border-0 shadow-sm">
+                                                <div class="card-body p-5">
+                                                    <div class="mb-4">
+                                                        <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                                                    </div>
+                                                    <h3 class="mb-3">Assessment Complete!</h3>
+                                                    <p class="text-muted mb-4">Thank you for completing the assessment.</p>
+                                                    <div class="row justify-content-center mb-4">
+                                                        <div class="col-md-6">
+                                                            <div class="card bg-light">
+                                                                <div class="card-body">
+                                                                    <h6 class="mb-2">Your Score</h6>
+                                                                    <h2 class="mb-0 text-primary" id="finalScore">0%</h2>
+                                                                    <div class="progress mt-2" style="height: 10px;">
+                                                                        <div class="progress-bar bg-success" id="scoreProgress" role="progressbar" style="width: 0%"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button class="btn btn-primary me-2" onclick="viewResults()">
+                                                        <i class="fas fa-chart-bar me-1"></i>View Detailed Results
+                                                    </button>
+                                                    <button class="btn btn-outline-secondary" onclick="goToDashboard()">
+                                                        <i class="fas fa-tachometer-alt me-1"></i>Back to Dashboard
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stats-icon bg-primary">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h5 class="card-title mb-0" id="completedAssessments">0</h5>
+                                        <p class="card-text text-muted">Completed</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stats-icon bg-success">
+                                        <i class="fas fa-percentage"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h5 class="card-title mb-0" id="averageScore">0%</h5>
+                                        <p class="card-text text-muted">Average Score</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stats-icon bg-info">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h5 class="card-title mb-0" id="userRank">-</h5>
+                                        <p class="card-text text-muted">Current Rank</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card stats-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="stats-icon bg-warning">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h5 class="card-title mb-0" id="pendingAssessments">0</h5>
+                                        <p class="card-text text-muted">Pending</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Available Assessments -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-list-ul me-2"></i>Available Assessments
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="availableAssessments" class="row">
+                                    <!-- Assessments will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-history me-2"></i>Recent Activity
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="recentActivity" class="activity-timeline">
+                                    <!-- Recent activity will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="fas fa-chart-pie me-2"></i>Skill Progress
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="skillProgressChart" width="300" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="data/assessment-templates.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
