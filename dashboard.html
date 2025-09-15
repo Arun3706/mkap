@@ -49,7 +49,13 @@
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="dashboard.html">
+                            <a class="nav-link active" href="#" onclick="showHomeTab()">
+                                <i class="fas fa-home me-2"></i>
+                                Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showDashboardTab()">
                                 <i class="fas fa-tachometer-alt me-2"></i>
                                 Dashboard
                             </a>
@@ -78,16 +84,93 @@
 
             <!-- Main Content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Dashboard</h1>
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">
-                                <i class="fas fa-calendar me-1"></i>Today
+                <!-- Home Tab Content -->
+                <div id="homeTabContent" class="tab-content-section">
+                    <div class="welcome-container-full">
+                        <!-- Welcome Header -->
+                        <div class="welcome-header-full">
+                            <div class="welcome-animation-full">
+                                <div class="welcome-icon-large-full">
+                                    <i class="fas fa-rocket"></i>
+                                </div>
+                                <div class="welcome-particles-full">
+                                    <div class="particle"></div>
+                                    <div class="particle"></div>
+                                    <div class="particle"></div>
+                                    <div class="particle"></div>
+                                    <div class="particle"></div>
+                                </div>
+                            </div>
+                            <h1 class="welcome-title-full">Welcome to HR Assessment System!</h1>
+                            <p class="welcome-subtitle-full">Hello <span id="welcomeUserNameFull">User</span>, we're excited to have you here!</p>
+                        </div>
+
+                        <!-- Welcome Content -->
+                        <div class="welcome-content-full">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="welcome-feature-full">
+                                        <div class="feature-icon-full">
+                                            <i class="fas fa-clipboard-check"></i>
+                                        </div>
+                                        <h4>Take Assessments</h4>
+                                        <p>Complete various skill assessments to track your progress and identify areas for improvement.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="welcome-feature-full">
+                                        <div class="feature-icon-full">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                        <h4>Track Progress</h4>
+                                        <p>Monitor your performance over time with detailed analytics and progress reports.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="welcome-feature-full">
+                                        <div class="feature-icon-full">
+                                            <i class="fas fa-trophy"></i>
+                                        </div>
+                                        <h4>Achieve Goals</h4>
+                                        <p>Set personal targets and work towards achieving your professional development goals.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="welcome-feature-full">
+                                        <div class="feature-icon-full">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <h4>Team Collaboration</h4>
+                                        <p>Compare your progress with team members and participate in group assessments.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Welcome Actions -->
+                        <div class="welcome-actions-full">
+                            <button type="button" class="btn btn-primary btn-lg welcome-btn-full" onclick="startWelcomeTour()">
+                                <i class="fas fa-play me-2"></i>Start Tour
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-lg welcome-btn-full" onclick="goToDashboard()">
+                                <i class="fas fa-arrow-right me-2"></i>Go to Dashboard
                             </button>
                         </div>
                     </div>
                 </div>
+
+                <!-- Dashboard Tab Content -->
+                <div id="dashboardTabContent" class="tab-content-section" style="display: none;">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Dashboard</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-group me-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">
+                                    <i class="fas fa-calendar me-1"></i>Today
+                                </button>
+                            </div>
+                        </div>
+                    </div>
 
                 <!-- Welcome Card -->
                 <div class="row mb-4">
@@ -378,6 +461,7 @@
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </main>
         </div>
