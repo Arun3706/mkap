@@ -84,6 +84,13 @@ function checkAuthentication() {
     if (currentUser) {
         $('#userName').text(currentUser.fullName);
         $('#welcomeUserName').text(currentUser.fullName);
+        $('#welcomeUserNameFull').text(currentUser.fullName);
+        
+        // Check if this is a first-time login and show Home tab by default
+        if (currentPage === 'dashboard.html' && shouldShowWelcomePage(currentUser)) {
+            showHomeTab();
+        }
+        // Note: For returning users, we keep the default Home tab active as set in HTML
     }
 }
 
@@ -532,6 +539,165 @@ function loadAssessmentData(user) {
     }
 }
 
+// Tab Navigation Functions
+function showHomeTab() {
+    // Hide dashboard content
+    $('#dashboardTabContent').hide();
+    
+    // Show home content
+    $('#homeTabContent').show();
+    
+    // Update active nav link
+    $('.sidebar .nav-link').removeClass('active');
+    $('.sidebar .nav-link').eq(0).addClass('active'); // Home tab is first
+    
+    // Ensure user name is updated in welcome content
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+        $('#welcomeUserNameFull').text(currentUser.fullName);
+    }
+}
+
+function showDashboardTab() {
+    // Hide home content
+    $('#homeTabContent').hide();
+    
+    // Show dashboard content
+    $('#dashboardTabContent').show();
+    
+    // Update active nav link
+    $('.sidebar .nav-link').removeClass('active');
+    $('.sidebar .nav-link').eq(1).addClass('active'); // Dashboard tab is second
+    
+    // Load dashboard data if not already loaded
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+        loadDashboardData();
+    }
+}
+
+// Welcome Page Functions
+function shouldShowWelcomePage(user) {
+    // Check if this is a first-time login
+    const isFirstTimeLogin = getStorageItem('firstTimeLogin_' + user.id);
+    
+    // Check if user has seen the welcome page before
+    const welcomeShown = getStorageItem('welcomeShown_' + user.id);
+    
+    // Show welcome page if it's first-time login and welcome hasn't been shown
+    return isFirstTimeLogin && !welcomeShown;
+}
+
+function skipWelcome() {
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+        // Mark welcome as shown for this user
+        setStorageItem('welcomeShown_' + currentUser.id, true);
+    }
+    
+    // Switch to dashboard tab
+    showDashboardTab();
+}
+
+function startWelcomeTour() {
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+        // Mark welcome as shown for this user
+        setStorageItem('welcomeShown_' + currentUser.id, true);
+    }
+    
+    // Switch to dashboard tab and start tour
+    showDashboardTab();
+    startDashboardTour();
+}
+
+function goToDashboard() {
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+        // Mark welcome as shown for this user
+        setStorageItem('welcomeShown_' + currentUser.id, true);
+    }
+    
+    // Switch to dashboard tab
+    showDashboardTab();
+}
+
+function startDashboardTour() {
+    // Create tour overlay
+    const tourOverlay = document.createElement('div');
+    tourOverlay.id = 'tourOverlay';
+    tourOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    `;
+    
+    // Create tour content
+    const tourContent = document.createElement('div');
+    tourContent.style.cssText = `
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    `;
+    
+    tourContent.innerHTML = `
+        <h4 class="mb-3">Welcome to your Dashboard!</h4>
+        <p class="mb-4">Here you can take assessments, view your progress, and track your performance.</p>
+        <div class="d-flex gap-2 justify-content-center">
+            <button class="btn btn-primary" onclick="endTour()">Got it!</button>
+            <button class="btn btn-outline-secondary" onclick="endTour()">Skip Tour</button>
+        </div>
+    `;
+    
+    tourOverlay.appendChild(tourContent);
+    document.body.appendChild(tourOverlay);
+    
+    // Auto-end tour after 10 seconds
+    setTimeout(() => {
+        if (document.getElementById('tourOverlay')) {
+            endTour();
+        }
+    }, 10000);
+}
+
+function endTour() {
+    const tourOverlay = document.getElementById('tourOverlay');
+    if (tourOverlay) {
+        tourOverlay.remove();
+    }
+}
+
+// Make functions globally available
+window.showHomeTab = showHomeTab;
+window.showDashboardTab = showDashboardTab;
+window.skipWelcome = skipWelcome;
+window.startWelcomeTour = startWelcomeTour;
+window.goToDashboard = goToDashboard;
+window.endTour = endTour;
+
+// Function to reset welcome page for testing (can be called from browser console)
+window.resetWelcomePage = function() {
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+        removeStorageItem('welcomeShown_' + currentUser.id);
+        removeStorageItem('firstTimeLogin_' + currentUser.id);
+        console.log('Welcome page reset for user:', currentUser.fullName);
+        showAlert('Welcome page has been reset. Refresh the page to see it again.', 'info');
+    } else {
+        console.log('No user logged in');
+    }
+};
+
 // Export functions for use in other modules
 window.appUtils = {
     showAlert,
@@ -539,5 +705,9 @@ window.appUtils = {
     showLoadingSpinner,
     hideLoadingSpinner,
     measurePerformance,
-    initializeBootstrapComponents
+    initializeBootstrapComponents,
+    shouldShowWelcomePage,
+    showHomeTab,
+    showDashboardTab,
+    startDashboardTour
 };

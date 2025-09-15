@@ -121,12 +121,20 @@ function handleLogin(e) {
                 return;
             }
             
+            // Check if this is a first-time login before updating lastLogin
+            const isFirstTimeLogin = !user.lastLogin;
+            
             // Update last login
             user.lastLogin = new Date().toISOString();
             setStorageItem('users', users);
             
             // Set current user
             setStorageItem('currentUser', user);
+            
+            // Mark as first-time login if needed
+            if (isFirstTimeLogin) {
+                setStorageItem('firstTimeLogin_' + user.id, true);
+            }
             
             // Initialize assessment assignments
             initializeAssessmentAssignments(user);

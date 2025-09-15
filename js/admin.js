@@ -543,7 +543,7 @@ function loadAssessmentsTab() {
                         </div>
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-info show-compatibility-btn" data-userid="${assessment.userId}">Show Compatibility</button>
+                        <button class="btn btn-sm btn-info show-compatibility-btn" data-userid="${assessment.userId}" data-category="${assessment.category}" data-title="${assessment.assessmentTitle}">Show Compatibility</button>
                     </td>
                 </tr>
                 ${matchBars ? `<tr><td colspan="7">${matchBars}</td></tr>` : ''}
@@ -790,14 +790,17 @@ $(document).on('click', '.category-btn', function() {
 
 $(document).on('click', '.show-compatibility-btn', function() {
     const userId = $(this).data('userid');
-    showUserCompatibility(userId);
+    const category = $(this).data('category');
+    const title = $(this).data('title');
+    showUserCompatibility(userId, category, title);
 });
 
-function showUserCompatibility(userId) {
+function showUserCompatibility(userId, category, assessmentTitle) {
     const user = adminData.users.find(u => u.id === userId);
     if (!user) return;
     let html = `<h5>Compatibility of <b>${sanitizeInput(user.fullName)}</b> with other users</h5>`;
-    const userAssessments = adminData.assessments.filter(a => a.userId === userId);
+    // Only use assessments for the selected category and title
+    const userAssessments = adminData.assessments.filter(a => a.userId === userId && a.category === category && a.assessmentTitle === assessmentTitle);
     const otherUsers = adminData.users.filter(u => u.id !== userId);
     let matchCount = 0;
     let totalComparisons = 0;
@@ -814,12 +817,14 @@ function showUserCompatibility(userId) {
             otherUsers.forEach(otherUser => {
                 let bestMatch = 0;
                 let bestAssessment = null;
+                let bestOtherAssessment = null;
                 userAssessments.forEach(ua => {
                     if (!ua.answers || Object.keys(ua.answers).length === 0) {
                         missingAnswers = true;
                         return;
                     }
-                    const otherAssessment = adminData.assessments.find(a => a.userId === otherUser.id && a.category === ua.category && a.assessmentTitle === ua.assessmentTitle);
+                    // Only compare with the same assessment for the other user
+                    const otherAssessment = adminData.assessments.find(a => a.userId === otherUser.id && a.category === category && a.assessmentTitle === assessmentTitle);
                     if (otherAssessment) {
                         if (!otherAssessment.answers || Object.keys(otherAssessment.answers).length === 0) {
                             missingAnswers = true;
@@ -829,28 +834,55 @@ function showUserCompatibility(userId) {
                         if (match > bestMatch) {
                             bestMatch = match;
                             bestAssessment = ua;
+                            bestOtherAssessment = otherAssessment;
                         }
                     }
                 });
-                if (bestAssessment) {
+                if (bestAssessment && bestOtherAssessment) {
                     totalComparisons++;
                     if (bestMatch >= 60) matchCount++;
-                    matchDetails.push({otherUser, bestMatch, bestAssessment});
+                    matchDetails.push({otherUser, bestMatch, bestAssessment, bestOtherAssessment});
                 }
             });
             // Sort matchDetails by bestMatch descending
             matchDetails.sort((a, b) => b.bestMatch - a.bestMatch);
             // Render sorted matches
-            matchDetails.forEach(({otherUser, bestMatch, bestAssessment}) => {
+            matchDetails.forEach(({otherUser, bestMatch, bestAssessment, bestOtherAssessment}) => {
                 const barColor = getMatchBarColor(bestMatch);
+                // Calculate scores (percentage)
+                const userScore = typeof bestAssessment.score === 'number' ? bestAssessment.score : (bestAssessment.correctAnswers && bestAssessment.totalQuestions ? Math.round((bestAssessment.correctAnswers / bestAssessment.totalQuestions) * 100) : null);
+                const otherScore = typeof bestOtherAssessment.score === 'number' ? bestOtherAssessment.score : (bestOtherAssessment.correctAnswers && bestOtherAssessment.totalQuestions ? Math.round((bestOtherAssessment.correctAnswers / bestOtherAssessment.totalQuestions) * 100) : null);
                 html += `
-                    <div class="mt-3">
-                        <div class="d-flex align-items-center justify-content-between">
+                    <div class="mt-4">
+                        <div class="d-flex align-items-center justify-content-between mb-1">
                             <span><b>${sanitizeInput(user.fullName)}</b> vs <b>${sanitizeInput(otherUser.fullName)}</b> (${sanitizeInput(bestAssessment.category.toUpperCase())} - ${sanitizeInput(bestAssessment.assessmentTitle)})</span>
-                            <span class="badge ${barColor} text-white ms-2">${bestMatch}%</span>
+                            <span class="badge ${barColor} text-white ms-2">${bestMatch}% Match</span>
                         </div>
-                        <div class="progress" style="height: 18px;">
-                            <div class="progress-bar ${barColor}" role="progressbar" style="width: ${bestMatch}%" aria-valuenow="${bestMatch}" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="row align-items-center mb-2">
+                            <div class="col-5 text-end pe-0">
+                                <span class="fw-bold">${sanitizeInput(user.fullName)}</span>
+                            </div>
+                            <div class="col-2 text-center px-0">
+                                <span class="text-muted">Score</span>
+                            </div>
+                            <div class="col-5 text-start ps-0">
+                                <span class="fw-bold">${sanitizeInput(otherUser.fullName)}</span>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-5 text-end pe-0">
+                                <div class="progress" style="height: 18px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: ${userScore !== null ? userScore : 0}%" aria-valuenow="${userScore !== null ? userScore : 0}" aria-valuemin="0" aria-valuemax="100">${userScore !== null ? userScore + '%' : 'N/A'}</div>
+                                </div>
+                            </div>
+                            <div class="col-2 text-center px-0">
+                                <span class="text-muted">vs</span>
+                            </div>
+                            <div class="col-5 text-start ps-0">
+                                <div class="progress" style="height: 18px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: ${otherScore !== null ? otherScore : 0}%" aria-valuenow="${otherScore !== null ? otherScore : 0}" aria-valuemin="0" aria-valuemax="100">${otherScore !== null ? otherScore + '%' : 'N/A'}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
